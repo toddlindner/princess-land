@@ -8,30 +8,42 @@
 body {
 	background-color: black;
 }
-.box {
+.box, .card {
 	position: absolute;
-	background-color: red;
 	border: 2px white solid;
 	text-align: center;
 	vertical-align: middle;
 }
+.box {
+	background-color: red;
+}
+.card {
+	background-color: blue;
+}
 </style>
 <script src="https:///code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script>
 $(function() {
 
-//$('<img>').attr('src','image1.jpg').appendTo('#div');
-
-var boxWidth = 100;
-var boxHeight = 80;
-var space = boxWidth / 5;
+var box = { w: 100, h: 80 };
+var space = box.w / 5;
 
 var initial = { x: 500, y: 500 };
 
+var card = { w: 150, h: 130 };
+
+var players = [ 
+	{ x: box.w * 8, y: box.h * 1 }, 
+	{ x: box.w * 8, y: box.h * 6 } 
+];
+
 function createBox(num) {
-	var box = move($('<div>'), initial.x, initial.y).addClass('box').width(boxWidth).height(boxHeight).css('line-height', boxHeight + 'px').appendTo('#root');
-	box.text(num)
-	return box;
+	// $('<img>').attr('src','image1.jpg').appendTo('#div');
+	return move($('<div>'), initial.x, initial.y).addClass('box')
+		.width(box.w).height(box.h).css('line-height', box.h + 'px')
+		.text(num)
+		.appendTo('#root');
 }
 
 var positions = [
@@ -62,15 +74,32 @@ var positions = [
 var boxes = [];
 function buildBoard() {
 	// for (i=0; i<35; ++i) {
-	// 	var x = boxWidth + space + i * (boxWidth + space)
-	// 	var y = space + Math.floor(i/5) * (boxHeight + space);
+	// 	var x = box.w + space + i * (box.w + space)
+	// 	var y = space + Math.floor(i/5) * (box.h + space);
 	// 	boxes.push(animate(createBox(i + 1), x, y));
 	// }
 	positions.forEach(function(pos, i) {
-		var x = pos[1] * (boxWidth + space) - boxWidth / 2 + space;
-		var y = pos[0] * (boxHeight + space) + space;
+		var x = pos[1] * (box.w + space) - box.w / 2 + space;
+		var y = pos[0] * (box.h + space) + space;
 		boxes.push(animate(createBox(i + 1), x, y));
 	});
+}
+
+function placeCards() {
+	function place(player, i) {
+		if (!player.name) {
+			player.name = 'Player ' + (i+1);
+		}
+		player.obj = move($('<div>'), player.x, player.y).addClass('card')
+			.width(card.w).height(card.h).css('line-height', card.h + 'px')
+			.text(player.name)
+			.appendTo('#root');
+	}
+	players.forEach(place);
+
+	deck = { name: 'Deck', x: box.w * 8, y: box.h * 3.5 };
+	place(deck);
+	deck.obj.draggable();
 }
 
 function animate(obj, x, y) {
@@ -84,6 +113,7 @@ function move(obj, x, y) {
 }
 
 buildBoard();
+placeCards();
 
 });
 </script>
