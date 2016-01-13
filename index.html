@@ -112,7 +112,7 @@ function placeCards() {
 
 	deck = { name: 'Deck', x: box.w * 8, y: box.h * 3.5 };
 	place(deck);
-	deck.obj.draggable();
+	deck.obj.draggable({ revert: true });
 }
 
 function animate(obj, x, y) {
