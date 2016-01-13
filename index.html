@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Princess Land</title>
+<link rel="stylesheet" href="reset.css" />
+<style>
+body {
+	background-color: black;
+}
+.box {
+	position: absolute;
+	background-color: red;
+	border: 2px white solid;
+	text-align: center;
+	vertical-align: middle;
+}
+</style>
+<script src="https:///code.jquery.com/jquery-2.2.0.min.js"></script>
+<script>
+$(function() {
+
+//$('<img>').attr('src','image1.jpg').appendTo('#div');
+
+var boxWidth = 100;
+var boxHeight = 80;
+var space = boxWidth / 5;
+
+var initial = { x: 500, y: 500 };
+
+function createBox(num) {
+	var box = move($('<div>'), initial.x, initial.y).addClass('box').width(boxWidth).height(boxHeight).css('line-height', boxHeight + 'px').appendTo('#root');
+	box.text(num)
+	return box;
+}
+
+var positions = [
+[0,1],
+[0,2],
+[0,3],
+[0,4],
+[0,5],
+[1,5.5],
+[2,5],
+[2,4],
+[2,3],
+[2,2],
+[2,1],
+[3,0.5],
+[4,1],
+[4,2],
+[4,3],
+[4,4],
+[4,5],
+[5,5.5],
+[6,5],
+[6,4],
+[6,3],
+[6,2],
+[6,1]
+];
+var boxes = [];
+function buildBoard() {
+	// for (i=0; i<35; ++i) {
+	// 	var x = boxWidth + space + i * (boxWidth + space)
+	// 	var y = space + Math.floor(i/5) * (boxHeight + space);
+	// 	boxes.push(animate(createBox(i + 1), x, y));
+	// }
+	positions.forEach(function(pos, i) {
+		var x = pos[1] * (boxWidth + space) - boxWidth / 2 + space;
+		var y = pos[0] * (boxHeight + space) + space;
+		boxes.push(animate(createBox(i + 1), x, y));
+	});
+}
+
+function animate(obj, x, y) {
+	obj.animate({ left: x, top: y }, { duration: 400, easing: 'swing'});
+	return obj;
+}
+
+function move(obj, x, y) {
+	obj.css({ left: x, top: y });
+	return obj;
+}
+
+buildBoard();
+
+});
+</script>
+</head>
+<body>
+<div id="root"></div>
+</body>
+</html>
